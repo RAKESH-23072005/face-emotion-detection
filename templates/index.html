@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Emotion Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-section {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px dashed #cbd5e0;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .upload-section h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="file"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .webcam-section {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .webcam-section h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        #video {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            border: 3px solid #e2e8f0;
+        }
+
+        #countdown {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .result-section {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(72, 187, 120, 0.3);
+        }
+
+        .result-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-section img {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin: 20px 0;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        audio {
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        audio::-webkit-media-controls-panel {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+        }
+
+        .emotion-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 10px 5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .upload-section, .webcam-section, .result-section {
+                padding: 20px;
+            }
+
+            #video {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎭 Face Emotion Detection</h1>
+
+        <!-- <div class="upload-section">
+            <h2>📁 Upload Image</h2>
+            <form method="post" enctype="multipart/form-data">
+                <div class="file-input-wrapper">
+                    <input type="file" name="image" accept="image/*" required>
+                </div>
+                <button type="submit">🔍 Detect Emotion</button>
+            </form>
+        </div> -->
+
+        <div class="webcam-section">
+            <h2>📹 Live Webcam Detection</h2>
+            <video id="video" width="320" height="240" autoplay></video>
+            <br>
+            <!-- <button id="snap">📸 Capture & Detect</button> -->
+            <div id="countdown" class="hidden">⏳ Next capture in 90 second(s)...</div>
+            <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing emotion detection...</p>
+        </div>
+
+        <div id="result">
+            {% if emotion %}
+                <div class="result-section">
+                    <h2>🎯 Detected Emotion</h2>
+                    <div class="emotion-badge">{{ emotion }}</div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: {{ confidence }}%"></div>
+                    </div>
+                    <p>Confidence: {{ confidence }}%</p>
+                    {% if image_url %}
+                        <img src="{{ image_url }}?t={{ timestamp }}" alt="Uploaded Image" width="200">
+                    {% endif %}
+                    {% if audio_path %}
+                        <audio autoplay controls>
+                            <source src="{{ url_for('static', filename=audio_path) }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const result = document.getElementById('result');
+        const countdownDiv = document.getElementById('countdown');
+        const loadingDiv = document.getElementById('loading');
+        const intervalSeconds = 90;
+
+        // Start webcam
+        navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+            video.srcObject = stream;
+            video.play();
+        }).catch(function(err) {
+            console.log("Webcam access denied:", err);
+        });
+
+        function showLoading() {
+            loadingDiv.style.display = 'block';
+            result.style.display = 'none';
+        }
+
+        function hideLoading() {
+            loadingDiv.style.display = 'none';
+            result.style.display = 'block';
+        }
+
+        function captureAndSubmit() {
+            console.log("Capturing at " + new Date().toLocaleTimeString());
+            showLoading();
+
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, 320, 240);
+
+            canvas.toBlob(function (blob) {
+                const formData = new FormData();
+                formData.append("image", blob, "webcam.jpg");
+
+                fetch("/", {
+                    method: "POST",
+                    headers: {
+                        'X-Requested-With': 'fetch'
+                    },
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(html => {
+                    result.innerHTML = html;
+                    hideLoading();
+                    resetCountdown();
+                })
+                .catch(error => {
+                    console.error("Upload failed:", error);
+                    hideLoading();
+                });
+            }, 'image/jpeg');
+        }
+
+        // Countdown logic
+        let timeLeft = intervalSeconds;
+        function updateCountdown() {
+            countdownDiv.classList.remove('hidden');
+            countdownDiv.textContent = `⏳ Next capture in ${timeLeft} second(s)...`;
+            if (timeLeft <= 0) {
+                captureAndSubmit();
+                timeLeft = intervalSeconds;
+            } else {
+                timeLeft--;
+            }
+        }
+
+        function resetCountdown() {
+            timeLeft = intervalSeconds;
+            countdownDiv.classList.add('hidden');
+        }
+
+        // Start countdown and first capture after 5 seconds
+        setTimeout(() => {
+            captureAndSubmit();
+            setInterval(updateCountdown, 1000);
+        }, 5000);
+
+        // Manual Capture
+        document.getElementById('snap').onclick = function (e) {
+            e.preventDefault();
+            captureAndSubmit();
+        };
+    </script>
+</body>
+</html>
