@@ -2,80 +2,80 @@
 
 ## Introduction
 
-L'expression faciale est l'un des principaux vecteurs de la communication humaine. Ce projet repose sur l'utilisation d'un réseau de neurones convolutionnels (CNN) pour analyser des images de visages et en extraire l'émotion correspondante. L'objectif est de fournir une classification en temps réel des expressions faciales en s'appuyant sur un modèle entraîné avec un ensemble de données annotées.
+Facial expression is one of the main vectors of human communication. This project is based on the use of a Convolutional Neural Network (CNN) to analyze images of faces and extract the corresponding emotion. The goal is to provide real-time classification of facial expressions using a model trained with an annotated dataset.
 
-## Fonctionnalités
+## Features
 
-- Détection des visages à l'aide d'OpenCV.
-- Classification des expressions faciales en différentes catégories (joie, tristesse, colère, surprise, etc.).
-- Prédiction en temps réel via une webcam ou sur des images statiques.
-- Entraînement et évaluation d'un modèle de deep learning avec TensorFlow et Keras.
+- Face detection using OpenCV.
+- Classification of facial expressions into different categories (joy, sadness, anger, surprise, etc.).
+- Real-time prediction via webcam or on static images.
+- Training and evaluation of a deep learning model with TensorFlow and Keras.
 
 ## Installation
 
-### Prérequis
+### Prerequisites
 
-Avant d'exécuter ce projet, assurez-vous d'avoir installé les dépendances nécessaires. Si vous utilisez un environnement virtuel, vous pouvez le recréer avec la commande suivante :
+Before running this project, make sure you have installed the necessary dependencies. If you are using a virtual environment, you can create it with the following command:
 
 ```bash
 python -m venv venv
-source venv/bin/activate  # Sur macOS/Linux
-venv\Scripts\activate  # Sur Windows
+source venv/bin/activate  # On macOS/Linux
+venv\Scripts\activate  # On Windows
 pip install -r requirements.txt
 ```
 
-### Cloner le dépôt GitHub
+### Clone the GitHub repository
 
 ```bash
 git clone https://github.com/sy895/facial_emotion_recognition.git
 cd facial_emotion_recognition
 ```
 
-## Utilisation
+## Usage
 
-### Lancer la détection en temps réel
+### Run real-time detection
 
 ```bash
 python app.py
 ```
 
-Ce script capture la vidéo depuis la webcam, détecte les visages et affiche l’émotion prédite en temps réel.
+This script captures video from the webcam, detects faces, and displays the predicted emotion in real time.
 
-### Tester une image statique
+### Test a static image
 
-Si vous souhaitez effectuer une prédiction sur une image unique, exécutez :
+If you want to make a prediction on a single image, run:
 
 ```bash
-python emotion_recognition.py --image chemin/vers/image.jpg
+python emotion_recognition.py --image path/to/image.jpg
 ```
 
-### Entraîner le modèle
+### Train the model
 
-Si vous souhaitez réentraîner le modèle avec un nouveau jeu de données, exécutez :
+If you want to retrain the model with a new dataset, run:
 
 ```bash
 python train_model.py
 ```
 
-Assurez-vous que les données sont bien organisées dans des répertoires `train/` et `test/`, avec chaque classe représentée par un sous-dossier contenant les images correspondantes.
+Make sure the data is organized in `train/` and `test/` directories, with each class represented by a subfolder containing the corresponding images.
 
-## Structure du projet
+## Project Structure
 
 ```
 face_expression_recognition/
-│── app.py                  # Script principal pour la détection en temps réel
-│── train_model.py           # Entraînement du modèle
-│── emotion_recognition.py   # Prédiction sur une image statique
-│── requirements.txt         # Liste des dépendances nécessaires
-│── model/                   # Modèle pré-entraîné
-│── dataset/                 # Dossier contenant les images d'entraînement et de test
-│── utils/                   # Fonctions auxiliaires pour le prétraitement des données
-└── README.md                # Documentation du projet
+│── app.py                  # Main script for real-time detection
+│── train_model.py          # Model training
+│── emotion_recognition.py  # Prediction on a static image
+│── requirements.txt        # List of required dependencies
+│── model/                  # Pre-trained model
+│── dataset/                # Folder containing the training and test images
+│── utils/                  # Auxiliary functions for data preprocessing
+└── README.md               # Project documentation
 ```
 
-## Dépendances
+## Dependencies
 
-Les principales bibliothèques utilisées dans ce projet sont :
+The main libraries used in this project are:
 
 - TensorFlow
 - OpenCV
@@ -83,22 +83,22 @@ Les principales bibliothèques utilisées dans ce projet sont :
 - Matplotlib
 - Pillow
 
-Pour installer toutes les dépendances, utilisez :
+To install all dependencies, use:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Améliorations possibles
+## Possible Improvements
 
-- Optimisation du modèle avec d'autres architectures plus performantes.
-- Ajout d’un mécanisme d’augmentation des données pour améliorer la robustesse du modèle.
-- Prise en charge des micro-expressions pour affiner l’analyse des émotions.
-- Intégration d’un mode interactif avec affichage des statistiques sur les prédictions.
+- Optimize the model with other, more efficient architectures.
+- Add a data augmentation mechanism to improve the robustness of the model.
+- Support micro-expressions to refine emotion analysis.
+- Integrate an interactive mode with display of prediction statistics.
 
-## Licence
+## License
 
-Ce projet est sous licence MIT. Vous êtes libre de l'utiliser et de le modifier selon vos besoins.
+This project is under the MIT license. You are free to use and modify it as you wish.
 
 <!-- face_expression_recognition/
 │── app.py # Main script for real-time detection
@@ -108,4 +108,4 @@ Ce projet est sous licence MIT. Vous êtes libre de l'utiliser et de le modifier
 │── model/  # Pre-trained model
 │── dataset/ # Folder containing the training and test images
 │── utils/ # Auxiliary functions for data preprocessing
-└── README.md # Project documentation -->
+└── README.md #
